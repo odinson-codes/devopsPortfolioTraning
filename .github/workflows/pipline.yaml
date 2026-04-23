@@ -16,7 +16,7 @@ jobs:
       - name: "Docker Image Builder"
         run: |
           docker login -u $DockerUser -p $DOCKERHUB_PAT
-          docker build -t $DockerUser/portfolio:v1
+          docker build -t $DockerUser/portfolio:v1 .
           docker push $DockerUser/portfolio:v1
         env:
           DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
