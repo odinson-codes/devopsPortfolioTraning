@@ -42,7 +42,7 @@ jobs:
           SSH_KEY64: ${{ secrets.SSH_KEY64 }}
 
       - name: "Docker Restarting and pulling"
-        run: \
+        run: |
           ssh -t ubuntu@$SERVER_IP -i pem.pem 'docker pull $DockerUser/portfolio:v1'
           ssh -t ubuntu@$SERVER_IP -i pem.pem  'docker stop portfolio && docker rm portfolio'
           ssh -t ubuntu@$SERVER_IP -i pem.pem  'docker run --name portfolio -p 80:80 -d  $DockerUser/portfolio:v1'
