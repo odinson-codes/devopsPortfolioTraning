@@ -11,35 +11,35 @@ jobs:
       DockerUser: ${{vars.Docker_user}}
 
     steps:
-      -uses: actions/checkout@v4
+      - name: "Docker Image Builder"
 
-      -name: "Docker Image Builder"
-      run: |
+      - uses: actions/checkout@v4
+        run: |
         docker login -u $DockerUser -p $DOCKERHUB_PAT
         docker build -t $DockerUser/portfolio:v1
         docker push $DockerUser/portfolio:v1
-      env:
-        DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
+        env:
+          DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
         
-      -name: "Setting SSH"
-      run: |
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
-         echo -e "Host *\\ntStrictHostKeyChecking no\n\n" > ~/.ssh/config
-         touch ~/.ssh/known_hosts
-         chmod 600 ~/.ssh/known_hosts
+      - name: "Setting SSH"
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo -e "Host *\\ntStrictHostKeyChecking no\n\n" > ~/.ssh/config
+          touch ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
        
-      -name: "SSH key to docker"
-      run: |
-        touch pem.pem
-        echo $SSH_KEY64 | base64 -d > pem.pem && chmod 600 pem.pem
-        ssh-keygen -R $SERVER_IP
-      env:
-        $SSH_KEY64: ${{ secrets.SSH_KEY64 }}
+      - name: "SSH key to docker"
+        run: |
+          touch pem.pem
+          echo $SSH_KEY64 | base64 -d > pem.pem && chmod 600 pem.pem
+          ssh-keygen -R $SERVER_IP
+        env:
+          SSH_KEY64: ${{ secrets.SSH_KEY64 }}
 
-      -name: "Docker Restarting and pulling"
-      run: \
-        ssh -t ubuntu@$SERVER_IP -i pem.pem 'docker pull $DockerUser/portfolio:v1'
-        ssh -t ubuntu@$SERVER_IP -i pem.pem  'docker stop portfolio && docker rm portfolio'
-        ssh -t ubuntu@$SERVER_IP -i pem.pem  'docker run --name portfolio -p 80:80 -d  $DockerUser/portfolio:v1'
+      - name: "Docker Restarting and pulling"
+        run: \
+          ssh -t ubuntu@$SERVER_IP -i pem.pem 'docker pull $DockerUser/portfolio:v1'
+          ssh -t ubuntu@$SERVER_IP -i pem.pem  'docker stop portfolio && docker rm portfolio'
+          ssh -t ubuntu@$SERVER_IP -i pem.pem  'docker run --name portfolio -p 80:80 -d  $DockerUser/portfolio:v1'
 
