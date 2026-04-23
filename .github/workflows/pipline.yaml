@@ -20,6 +20,10 @@ jobs:
           docker push $DockerUser/portfolio:v1
         env:
           DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
+
+      - name: "Install SSH"
+        run: |
+          sudo apt-get install -y openssh-client
         
       - name: "Setting SSH"
         run: |
