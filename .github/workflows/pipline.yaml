@@ -15,9 +15,9 @@ jobs:
 
       - uses: actions/checkout@v4
         run: |
-        docker login -u $DockerUser -p $DOCKERHUB_PAT
-        docker build -t $DockerUser/portfolio:v1
-        docker push $DockerUser/portfolio:v1
+          docker login -u $DockerUser -p $DOCKERHUB_PAT
+          docker build -t $DockerUser/portfolio:v1
+          docker push $DockerUser/portfolio:v1
         env:
           DOCKERHUB_PAT: ${{ secrets.DOCKERHUB_PAT }}
         
