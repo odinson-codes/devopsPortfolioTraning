@@ -29,7 +29,7 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          echo -e "Host *\\ntStrictHostKeyChecking no\n\n" > ~/.ssh/config
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
           touch ~/.ssh/known_hosts
           chmod 600 ~/.ssh/known_hosts
        
